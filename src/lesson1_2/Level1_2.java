@@ -1,3 +1,5 @@
+package lesson1_2;
+
 public class Level1_2 {
     public static void main(String[] args) {
         int[] arr1 = {1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0};

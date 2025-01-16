@@ -1,3 +1,5 @@
+package lesson1_1;
+
 public class Level1_1 {
     public static void main(String[] args) {
         printThreeWords();
