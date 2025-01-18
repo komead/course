@@ -15,10 +15,11 @@ public class Level1_1 {
     public static void checkSumSign() {
         int a = 1, b = 2;
 
-        if (a + b >= 10)
+        if (a + b >= 10){
             System.out.println("Сумма положительная");
-        else
+        }else{
             System.out.println("Сумма отрицательная");
+        }
     }
 
     public static void printColor() {
