@@ -37,7 +37,7 @@ public class tasks {
 
         print(12);
         System.out.print("Введите выражение без пробелов: ");
-        task12(scanner.next());
+        task12(0, scanner.next());
     }
 
     private static void task2(int[] arr) {
@@ -129,47 +129,19 @@ public class tasks {
         return result;
     }
 
-    private static void task12(String string) {
-        String[] buff1 = cutter('+', string);
+    private static double task12(int level, String string) {
         double result = 0;
-
-        for (int i = 0; i < buff1.length; i++) {
-            String[] buff2 = cutter('-', buff1[i]);
-
-            for (int j = 0; j < buff2.length; j++) {
-                String[] buff3 = cutter('*', buff2[j]);
-
-                for (int f = 0; f < buff3.length; f++) {
-                    String[] buff4 = cutter('/', buff3[f]);
-
-                    for (int t = 0; t < buff4.length; t++) {
-                        buff4[t] = calculate(buff4[t]);
-
-                        if (t > 0)
-                            buff3[f] = String.valueOf(Double.valueOf(buff3[f]) / Double.valueOf(buff4[t]));
-                        else
-                            buff3[f] = String.valueOf(Double.valueOf(buff4[t]));
-                    }
-
-                    if (f > 0)
-                        buff2[j] = String.valueOf(Double.valueOf(buff2[j]) * Double.valueOf(buff3[f]));
-                    else
-                        buff2[j] = String.valueOf(Double.valueOf(buff3[f]));
-                }
-
-                if (j > 0)
-                    buff1[i] = String.valueOf(Double.valueOf(buff1[i]) - Double.valueOf(buff2[j]));
-                else
-                    buff1[i] = String.valueOf(Double.valueOf(buff2[j]));
-            }
-
-            result += Double.valueOf(buff1[i]);
-        }
-        System.out.println(result);
-    }
-
-    private static String[] cutter(char symbol, String string) {
         int counter = 1;
+        char symbol = switch (level) {
+            case 0 -> '+';
+            case 1 -> '-';
+            case 2 -> '*';
+            case 3 -> '/';
+            default -> ' ';
+        };
+
+        if (level == 2 || level == 3)
+            result++;
 
         for (int i = 0; i < string.length(); i++)
             if (string.charAt(i) == symbol)
@@ -184,23 +156,47 @@ public class tasks {
             else
                 counter--;
         }
-        return buff;
+
+        for (int i = 0; i < buff.length; i++) {
+            switch (symbol) {
+                case '+':
+                    result += calculate(Double.toString(task12(level + 1, buff[i])));
+                    break;
+                case '-':
+                    if (i == 0)
+                        result = calculate(Double.toString(task12(level + 1, buff[i])));
+                    else
+                        result -= calculate(Double.toString(task12(level + 1, buff[i])));
+                    break;
+                case '*':
+                    result *= calculate(Double.toString(task12(level + 1, buff[i])));
+                    break;
+                case '/':
+                    if (i == 0)
+                        result = calculate(buff[i]);
+                    else
+                        result /= calculate(buff[i]);
+                    break;
+            }
+        }
+
+        return result;
     }
 
-    private static String calculate(String string) {
+    private static double calculate(String string) {
         if (string.startsWith("sin"))
-            return String.valueOf(Math.sin(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1)))));
+            return Math.sin(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1))));
 
         if (string.startsWith("cos"))
-            return String.valueOf(Math.cos(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1)))));
+            return Math.cos(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1))));
 
         if (string.startsWith("tg"))
-            return  String.valueOf(Math.tan(Math.toRadians(Double.valueOf(string.substring(3, string.length() - 1)))));
+            return Math.tan(Math.toRadians(Double.valueOf(string.substring(3, string.length() - 1))));
 
         if (string.startsWith("ctg"))
-            return String.valueOf(1.0 / Math.tan(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1)))));
+            return 1.0 / Math.tan(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1))));
 
-        return string;
+        return Double.valueOf(string);
     }
 
     public static void print(int taskNumber, int... arr) {
