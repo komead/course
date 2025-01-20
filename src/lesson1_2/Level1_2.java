@@ -60,6 +60,8 @@ public class Level1_2 {
     }
 
     //Задания не из методички
+
+    //проставляй ковычки. потом проблем не оберешься.
     public static void task1(int[] arr) {
         for (int i = 0; i < arr.length; i++)
             if (arr[i] == 1)
@@ -68,17 +70,22 @@ public class Level1_2 {
                 arr[i] = 1;
     }
 
+    //проставляй ковычки. потом проблем не оберешься.
     public static void task2(int[] arr) {
         for (int i = 0; i < arr.length; i++)
             arr[i] = i * 3;
     }
 
+    //проставляй ковычки. потом проблем не оберешься.
     public static void task3(int[] arr) {
         for (int i = 0; i < arr.length; i++)
             if (arr[i] < 6)
                 arr[i] *= 2;
     }
 
+    //метод должен выполнять только одно действие. в данном случает выставление единиц по диагонали. 
+    //для печати в консоль используй отдельный метод.
+    //проставляй ковычки. потом проблем не оберешься.
     public static void task4(int[][] arr) {
         for (int i = 0; i < arr.length; i++)
             arr[i][i] = 1;
@@ -91,6 +98,9 @@ public class Level1_2 {
         }
     }
 
+    //проставляй ковычки. потом проблем не оберешься.
+    //тут тоже должен работать подход "один метод - одно действие."
+    //т.е. нужно написать 2 маленьких метода с ретурнами и принтить результат из main
     public static void task5(int[] arr) {
         int min = arr[0], max = arr[0];
 
