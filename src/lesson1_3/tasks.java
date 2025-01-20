@@ -131,27 +131,41 @@ public class tasks {
 
     private static void task12(String string) {
         String[] buff1 = cutter('+', string);
-        String[][][][] operands = new String[buff1.length][][][];
+        double result = 0;
 
-        for (int i = 0; i < operands.length; i++) {
-            String[] buff2 = cutter('+', buff1[i]);
-            operands[i] = new String[buff2.length][][];
+        for (int i = 0; i < buff1.length; i++) {
+            String[] buff2 = cutter('-', buff1[i]);
 
-            for (int j = 0; j < operands[i].length; j++) {
+            for (int j = 0; j < buff2.length; j++) {
                 String[] buff3 = cutter('*', buff2[j]);
-                operands[i][j] = new String[buff3.length][];
 
-                for (int f = 0; f < operands[i][j].length; f++) {
-                    String[] buff4 = cutter('/', buff3[j]);
-                    operands[i][j][f] = new String[buff4.length];
+                for (int f = 0; f < buff3.length; f++) {
+                    String[] buff4 = cutter('/', buff3[f]);
 
-                    for (int t = 0; t < operands[i][j][f].length; t++) {
-                        operands[i][j][f][t] = null;
-                        ///////////////////////////
+                    for (int t = 0; t < buff4.length; t++) {
+                        buff4[t] = calculate(buff4[t]);
+
+                        if (t > 0)
+                            buff3[f] = String.valueOf(Double.valueOf(buff3[f]) / Double.valueOf(buff4[t]));
+                        else
+                            buff3[f] = String.valueOf(Double.valueOf(buff4[t]));
                     }
+
+                    if (f > 0)
+                        buff2[j] = String.valueOf(Double.valueOf(buff2[j]) * Double.valueOf(buff3[f]));
+                    else
+                        buff2[j] = String.valueOf(Double.valueOf(buff3[f]));
                 }
+
+                if (j > 0)
+                    buff1[i] = String.valueOf(Double.valueOf(buff1[i]) - Double.valueOf(buff2[j]));
+                else
+                    buff1[i] = String.valueOf(Double.valueOf(buff2[j]));
             }
+
+            result += Double.valueOf(buff1[i]);
         }
+        System.out.println(result);
     }
 
     private static String[] cutter(char symbol, String string) {
@@ -166,11 +180,27 @@ public class tasks {
 
         for (int i = 0; i < string.length(); i++) {
             if (string.charAt(i) != symbol)
-                buff[string.length() - counter] += string.charAt(i);
+                buff[buff.length - counter] += string.charAt(i);
             else
                 counter--;
         }
         return buff;
+    }
+
+    private static String calculate(String string) {
+        if (string.startsWith("sin"))
+            return String.valueOf(Math.sin(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1)))));
+
+        if (string.startsWith("cos"))
+            return String.valueOf(Math.cos(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1)))));
+
+        if (string.startsWith("tg"))
+            return  String.valueOf(Math.tan(Math.toRadians(Double.valueOf(string.substring(3, string.length() - 1)))));
+
+        if (string.startsWith("ctg"))
+            return String.valueOf(1.0 / Math.tan(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1)))));
+
+        return string;
     }
 
     public static void print(int taskNumber, int... arr) {
