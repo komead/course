@@ -34,6 +34,10 @@ public class tasks {
                 arrays[i][j] = scanner.nextInt();
         }
         print(11, task11(arrays));
+
+        print(12);
+        System.out.print("Введите выражение без пробелов: ");
+        task12(scanner.next());
     }
 
     private static void task2(int[] arr) {
@@ -125,8 +129,48 @@ public class tasks {
         return result;
     }
 
-    private static void task12() {
-        //ещё не сделал
+    private static void task12(String string) {
+        String[] buff1 = cutter('+', string);
+        String[][][][] operands = new String[buff1.length][][][];
+
+        for (int i = 0; i < operands.length; i++) {
+            String[] buff2 = cutter('+', buff1[i]);
+            operands[i] = new String[buff2.length][][];
+
+            for (int j = 0; j < operands[i].length; j++) {
+                String[] buff3 = cutter('*', buff2[j]);
+                operands[i][j] = new String[buff3.length][];
+
+                for (int f = 0; f < operands[i][j].length; f++) {
+                    String[] buff4 = cutter('/', buff3[j]);
+                    operands[i][j][f] = new String[buff4.length];
+
+                    for (int t = 0; t < operands[i][j][f].length; t++) {
+                        operands[i][j][f][t] = null;
+                        ///////////////////////////
+                    }
+                }
+            }
+        }
+    }
+
+    private static String[] cutter(char symbol, String string) {
+        int counter = 1;
+
+        for (int i = 0; i < string.length(); i++)
+            if (string.charAt(i) == symbol)
+                counter++;
+
+        String[] buff = new String[counter];
+        Arrays.fill(buff, "");
+
+        for (int i = 0; i < string.length(); i++) {
+            if (string.charAt(i) != symbol)
+                buff[string.length() - counter] += string.charAt(i);
+            else
+                counter--;
+        }
+        return buff;
     }
 
     public static void print(int taskNumber, int... arr) {
