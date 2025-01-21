@@ -20,11 +20,12 @@ public class Level1_2 {
 
         System.out.println("\nЗадание 4:");
         int[][] arr4 = new int[5][5];
-        task4(arr4);
+        printArr(task4(arr4));
 
         System.out.println("\nЗадание 5:");
         int[] arr5 = {10, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
-        task5(arr5);
+        int[] minmax = task5(arr5);
+        System.out.println("min: " + minmax[0] + " max: " + minmax[1]);
 
         System.out.println("\nЗадание 6:");
         int[] arr6 = {1, 1, 2, 2, 3, 4, 5};
@@ -61,54 +62,45 @@ public class Level1_2 {
 
     //Задания не из методички
 
-    //проставляй ковычки. потом проблем не оберешься.
     public static void task1(int[] arr) {
-        for (int i = 0; i < arr.length; i++)
-            if (arr[i] == 1)
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == 1) {
                 arr[i] = 0;
-            else
+            } else {
                 arr[i] = 1;
-    }
-
-    //проставляй ковычки. потом проблем не оберешься.
-    public static void task2(int[] arr) {
-        for (int i = 0; i < arr.length; i++)
-            arr[i] = i * 3;
-    }
-
-    //проставляй ковычки. потом проблем не оберешься.
-    public static void task3(int[] arr) {
-        for (int i = 0; i < arr.length; i++)
-            if (arr[i] < 6)
-                arr[i] *= 2;
-    }
-
-    //метод должен выполнять только одно действие. в данном случает выставление единиц по диагонали. 
-    //для печати в консоль используй отдельный метод.
-    //проставляй ковычки. потом проблем не оберешься.
-    public static void task4(int[][] arr) {
-        for (int i = 0; i < arr.length; i++)
-            arr[i][i] = 1;
-
-        for (int[] i : arr) {
-            for (int j : i)
-                System.out.print(j + " ");
-
-            System.out.println();
+            }
         }
     }
 
-    //проставляй ковычки. потом проблем не оберешься.
-    //тут тоже должен работать подход "один метод - одно действие."
-    //т.е. нужно написать 2 маленьких метода с ретурнами и принтить результат из main
-    public static void task5(int[] arr) {
+    public static void task2(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = i * 3;
+        }
+    }
+
+    public static void task3(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] < 6) {
+                arr[i] *= 2;
+            }
+        }
+    }
+
+    public static int[][] task4(int[][] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            arr[i][i] = 1;
+        }
+        return arr;
+    }
+
+    public static int[] task5(int[] arr) {
         int min = arr[0], max = arr[0];
 
         for (int number : arr) {
             min = Math.min(min, number);
             max = Math.max(max, number);
         }
-        System.out.println("min: " + min + " max: " + max);
+        return new int[]{min, max};
     }
 
     public static String task6(int[] arr) {
@@ -154,10 +146,11 @@ public class Level1_2 {
     }
 
     private static void task9(int number) {
-        if (number < 0)
+        if (number < 0) {
             System.out.println("Отрицательное");
-        else
+        } else {
             System.out.println("Положительное");
+        }
     }
 
     private static boolean task10(int number) {
@@ -165,8 +158,9 @@ public class Level1_2 {
     }
 
     private static void task11(String str, int n) {
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++) {
             System.out.println(str);
+        }
     }
 
     private static boolean task12(int year) {
@@ -176,8 +170,21 @@ public class Level1_2 {
     public static void printArr(int[] arr) {
         System.out.print("Результат: ");
 
-        for (int number : arr)
+        for (int number : arr) {
             System.out.print(number + " ");
+        }
+
+        System.out.println();
+    }
+
+    public static void printArr(int[][] arr) {
+        System.out.print("Результат: ");
+
+        for (int[] i : arr) {
+            for (int j : i) {
+                System.out.print(j + " ");
+            }
+        }
 
         System.out.println();
     }
