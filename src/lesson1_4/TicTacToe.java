@@ -29,16 +29,39 @@ public class TicTacToe {
         clearBoard();
 
         if (random.nextBoolean()) {
-            playerFigure = 'x';
-            computerFigure = 'o';
+            setFigures('x', 'o');
         } else {
-            playerFigure = 'o';
-            computerFigure = 'x';
+            setFigures('o', 'x');
         }
         System.out.println("Вы играете за " + playerFigure);
 
         while (stepCounter < fieldLength * fieldLength) {
+            if (computerFigure == 'o' || stepCounter != 0) {
+                computerMove();
 
+                if (checkEndGame()) {
+                    System.out.println("Вы проиграли!");
+                }
+            }
+            stepCounter++;
+
+            int yPos, xPos;
+            while (true) {
+                System.out.println("Введите координаты выбранной ячейки: ");
+                yPos = scanner.nextInt();
+                xPos = scanner.nextInt();
+
+                if (cellIsAvailable(yPos, xPos)) {
+                    break;
+                }
+                System.out.println("Данная ячейка занята!");
+            }
+            playerMove(yPos, xPos);
+
+            if (checkEndGame()) {
+                System.out.println("Вы победили!");
+            }
+            stepCounter++;
         }
     }
 
@@ -51,10 +74,13 @@ public class TicTacToe {
     }
 
     public boolean checkEndGame() {
-        return true;
+        if (stepCounter == fieldLength * fieldLength) {
+            return true;
+        }
+        return false;
     }
 
-    public boolean sellIsAvailable(int yPos, int xPos) {
+    public boolean cellIsAvailable(int yPos, int xPos) {
         return field[yPos][xPos] == ' ';
     }
 
