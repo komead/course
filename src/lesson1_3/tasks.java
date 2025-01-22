@@ -64,8 +64,14 @@ public class tasks {
             System.out.println("Угадайте загаданную цифру. Осталось попыток: " + attempts + "\nВедите цифру: ");
             answer = scanner.nextInt();
 
-            if (answer == number)
+            if (answer == number) {
                 System.out.println("Вы угадали число!");
+            } else if (answer > number) {
+                System.out.println("Ваше число больше");
+            } else {
+                System.out.println("Ваше число меньше");
+            }
+
             if (answer == number || attempts == 1) {
                 System.out.println("Игра завершена. Повторить игру еще раз? 1 – да / 0 – нет");
                 switch (scanner.nextInt()) {
@@ -80,7 +86,6 @@ public class tasks {
                         System.out.println("Нет такого действия!");
                 }
             }
-
             attempts--;
         }
     }
@@ -100,6 +105,8 @@ public class tasks {
             if (answer.equals(word)) {
                 System.out.println("Вы угадали слово!" + "\nИгра закончена");
                 break;
+            } else {
+                System.out.println("Было загадано другое слово!");
             }
 
             char[] buff = new char[15];
