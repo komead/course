@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class TicTacToe {
     private int fieldHeight;
     private int fieldLength;
-    private int stepCounter;
     private char playerFigure;
     private char computerFigure;
 
@@ -25,8 +24,10 @@ public class TicTacToe {
             System.out.println("Размер поля не может быть таким маленьким. Установлен стандартный размер поля.");
         }
         field = new char[fieldHeight][fieldLength];
-        stepCounter = 0;
+        int stepCounter = 0;
         clearBoard();
+
+        printField(field);
 
         if (random.nextBoolean()) {
             setFigures('x', 'o');
@@ -42,12 +43,17 @@ public class TicTacToe {
                 winner = checkWinner();
                 stepCounter++;
 
-                if (stepCounter == fieldLength * fieldLength && winner == computerFigure) {
+                if (winner == computerFigure) {
                     System.out.println("Вы проиграли!");
-                } else if (stepCounter == fieldLength * fieldLength) {
+                    break;
+                }
+                if (stepCounter == fieldLength * fieldLength) {
                     System.out.println("Ничья");
+                    break;
                 }
             }
+
+            printField(field);
 
             int yPos, xPos;
             while (true) {
@@ -64,16 +70,31 @@ public class TicTacToe {
             winner = checkWinner();
             stepCounter++;
 
-            if (stepCounter == fieldLength * fieldLength && winner == playerFigure) {
+            if (winner == playerFigure) {
                 System.out.println("Вы победили!");
-            } else if (stepCounter == fieldLength * fieldLength) {
+                break;
+            }
+            if (stepCounter == fieldLength * fieldLength) {
                 System.out.println("Ничья");
+                break;
             }
         }
     }
 
     public void computerMove() {
-
+        for (int i = 0; i < fieldHeight; i++) {
+            for (int j = 0; j < fieldLength; j++) {
+//                if ((j < fieldLength - 2 && field[i][j] == field[i][j + 1] && field[i][j + 1] == field[i][j + 2])
+//                || (i < fieldHeight - 2 && field[i][j] == field[i + 1][j] && field[i + 1][j] == field[i + 2][j])
+//                || (i < fieldHeight - 2 && j < fieldLength - 2 && field[i][j] == field[i + 1][j + 1] && field[i + 1][j + 1] == field[i + 2][j + 2])
+//                || (i > 1 && j < fieldLength - 2 && field[i][j] == field[i - 1][j + 1] && field[i - 1][j +1] == field[i - 2][j + 2])) {
+//                    if (field[i][j] == computerFigure || field[i][j] == playerFigure) {
+//
+//                    }
+//
+//                }
+            }
+        }
     }
 
     public void playerMove(int yPos, int xPos) {
@@ -83,10 +104,10 @@ public class TicTacToe {
     public char checkWinner() {
         for (int i = 0; i < fieldHeight; i++) {
             for (int j = 0; j < fieldLength; j++) {
-                if ((i < fieldHeight - 2 && field[i][j] == field[i + 1][j] && field[i + 1][j] == field[i + 2][j])
-                || (j < fieldLength - 2 && field[i][j] == field[i][j + 1] && field[i][j +1] == field[i][j + 2])
+                if ((j < fieldLength - 2 && field[i][j] == field[i][j + 1] && field[i][j + 1] == field[i][j + 2])
+                || (i < fieldHeight - 2 && field[i][j] == field[i + 1][j] && field[i + 1][j] == field[i + 2][j])
                 || (i < fieldHeight - 2 && j < fieldLength - 2 && field[i][j] == field[i + 1][j + 1] && field[i + 1][j + 1] == field[i + 2][j + 2])
-                || (i > 2 && j < fieldLength - 2 && field[i][j] == field[i - 1][j + 1] && field[i - 1][j +1] == field[i - 2][j + 2])) {
+                || (i > 1 && j < fieldLength - 2 && field[i][j] == field[i - 1][j + 1] && field[i - 1][j +1] == field[i - 2][j + 2])) {
                     if (field[i][j] == computerFigure || field[i][j] == playerFigure)
                         return field[i][j];
                 }
@@ -119,11 +140,24 @@ public class TicTacToe {
     }
 
     public void printField(char[][] arr) {
+        System.out.print(" ");
         for (int i = 0; i < arr.length; i++) {
+            System.out.print("   " + i);
+        }
+        System.out.println();
+
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(i + " |");
             for (int j = 0; j < arr[i].length; j++) {
-                System.out.print(arr[i][j] + " ");
+                System.out.print(" " + arr[i][j] + " |");
             }
+//            System.out.print("\n   ");
+//
+//            for (int j = 0; j < arr[i].length * 4 - 1; j++) {
+//                System.out.print("—");
+//            }
             System.out.println();
         }
+        System.out.println();
     }
 }
