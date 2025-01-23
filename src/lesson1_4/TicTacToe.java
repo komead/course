@@ -35,15 +35,19 @@ public class TicTacToe {
         }
         System.out.println("Вы играете за " + playerFigure);
 
+        char winner;
         while (stepCounter < fieldLength * fieldLength) {
             if (computerFigure == 'o' || stepCounter != 0) {
                 computerMove();
+                winner = checkWinner();
+                stepCounter++;
 
-                if (checkEndGame()) {
+                if (stepCounter == fieldLength * fieldLength && winner == computerFigure) {
                     System.out.println("Вы проиграли!");
+                } else if (stepCounter == fieldLength * fieldLength) {
+                    System.out.println("Ничья");
                 }
             }
-            stepCounter++;
 
             int yPos, xPos;
             while (true) {
@@ -57,11 +61,14 @@ public class TicTacToe {
                 System.out.println("Данная ячейка занята!");
             }
             playerMove(yPos, xPos);
-
-            if (checkEndGame()) {
-                System.out.println("Вы победили!");
-            }
+            winner = checkWinner();
             stepCounter++;
+
+            if (stepCounter == fieldLength * fieldLength && winner == playerFigure) {
+                System.out.println("Вы победили!");
+            } else if (stepCounter == fieldLength * fieldLength) {
+                System.out.println("Ничья");
+            }
         }
     }
 
@@ -73,11 +80,20 @@ public class TicTacToe {
         field[yPos][xPos] = playerFigure;
     }
 
-    public boolean checkEndGame() {
-        if (stepCounter == fieldLength * fieldLength) {
-            return true;
+    public char checkWinner() {
+        for (int i = 0; i < fieldHeight; i++) {
+            for (int j = 0; j < fieldLength; j++) {
+                if ((i < fieldHeight - 2 && field[i][j] == field[i + 1][j] && field[i + 1][j] == field[i + 2][j])
+                || (j < fieldLength - 2 && field[i][j] == field[i][j + 1] && field[i][j +1] == field[i][j + 2])
+                || (i < fieldHeight - 2 && j < fieldLength - 2 && field[i][j] == field[i + 1][j + 1] && field[i + 1][j + 1] == field[i + 2][j + 2])
+                || (i > 2 && j < fieldLength - 2 && field[i][j] == field[i - 1][j + 1] && field[i - 1][j +1] == field[i - 2][j + 2])) {
+                    if (field[i][j] == computerFigure || field[i][j] == playerFigure)
+                        return field[i][j];
+                }
+            }
         }
-        return false;
+
+        return ' ';
     }
 
     public boolean cellIsAvailable(int yPos, int xPos) {
