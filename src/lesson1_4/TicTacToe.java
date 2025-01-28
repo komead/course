@@ -16,14 +16,11 @@ public class TicTacToe {
 
     public void play() {
         System.out.println("Введите размер квадратного игрового поля: ");
-        setFieldSize(scanner.nextInt());
+        setFieldParams(scanner.nextInt());
 
         if (fieldSize < 3) {
-            setFieldSize(3);
-            lineLength = 3;
+            setFieldParams(3);
             System.out.println("Размер поля не может быть таким маленьким. Установлен стандартный размер поля.");
-        } else {
-            lineLength = 4;
         }
         field = new char[fieldSize][fieldSize];
         int stepCounter = 0;
@@ -40,6 +37,7 @@ public class TicTacToe {
         while (stepCounter < fieldSize * fieldSize) {
             if (computerFigure == 'o' || stepCounter != 0) {
                 computerMove();
+                System.out.println("Компьютер сделал ход:");
                 printField(field);
                 winner = checkWinner();
                 stepCounter++;
@@ -52,9 +50,9 @@ public class TicTacToe {
                     System.out.println("Ничья");
                     break;
                 }
+            } else {
+                printField(field);
             }
-
-            printField(field);
 
             int yPos, xPos;
             while (true) {
@@ -68,6 +66,7 @@ public class TicTacToe {
                 System.out.println("Данная ячейка занята!");
             }
             playerMove(yPos, xPos);
+//            printField(field);
             winner = checkWinner();
             stepCounter++;
 
@@ -83,45 +82,56 @@ public class TicTacToe {
     }
 
     public void computerMove() {
-        // Сюда будут записываться кол-во фигур игрока, кол-во фигур компьютера, кол-во пробелов, индексы и направления линий
-        int[] bestCombination = new int[] {0, 0, 0, 0, 0, 0, 0};
-        int[] tempCombination;
+        // Сюда будут записываться кол-во фигур игрока, кол-во фигур компьютера, индексы первого элемента и направления линий
+        int[] bestCombination = new int[] {0, 0, 0, 0, 0, 0};
 
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
-                if (j < fieldSize - lineLength + 1) {
-                    tempCombination = checkCombination(i, j, 0, 1);
-                    if (tempCombination != null) {
-                        bestCombination = tempCombination;
-                    }
-                }
-
-                if (i < fieldSize - lineLength + 1) {
-                    tempCombination = checkCombination(i, j, 1, 0);
-                    if (tempCombination != null) {
-                        bestCombination = tempCombination;
-                    }
-                }
-
                 if (i < fieldSize - lineLength + 1 && j < fieldSize - lineLength + 1) {
-                    tempCombination = checkCombination(i, j, 1, 1);
-                    if (tempCombination != null) {
-                        bestCombination = tempCombination;
+                    bestCombination = checkCombination(bestCombination, i, j, 1, 1);
+
+                    if (bestCombination[0] == 0 && (lineLength - bestCombination[0] - bestCombination[1] == 1)) {
+                        setComputerFigureOnBoard(bestCombination);
+                        return;
                     }
                 }
 
                 if (i > lineLength - 2 && j < fieldSize - lineLength + 1) {
-                    tempCombination = checkCombination(i, j, -1, 1);
-                    if (tempCombination != null) {
-                        bestCombination = tempCombination;
+                    bestCombination = checkCombination(bestCombination, i, j, -1, 1);
+
+                    if (bestCombination[0] == 0 && (lineLength - bestCombination[0] - bestCombination[1] == 1)) {
+                        setComputerFigureOnBoard(bestCombination);
+                        return;
+                    }
+                }
+
+                if (j < fieldSize - lineLength + 1) {
+                    bestCombination = checkCombination(bestCombination, i, j, 0, 1);
+
+                    if (bestCombination[0] == 0 && (lineLength - bestCombination[0] - bestCombination[1] == 1)) {
+                        setComputerFigureOnBoard(bestCombination);
+                        return;
+                    }
+                }
+
+                if (i < fieldSize - lineLength + 1) {
+                    bestCombination = checkCombination(bestCombination, i, j, 1, 0);
+
+                    if (bestCombination[0] == 0 && (lineLength - bestCombination[0] - bestCombination[1] == 1)) {
+                        setComputerFigureOnBoard(bestCombination);
+                        return;
                     }
                 }
             }
         }
 
+        setComputerFigureOnBoard(bestCombination);
+    }
+
+    public void setComputerFigureOnBoard(int[] bestCombination) {
         for (int k = 0; k < lineLength; k++) {
-            int i = bestCombination[3] + k * bestCombination[5];
-            int j = bestCombination[4] + k * bestCombination[6];
+            int i = bestCombination[2] + k * bestCombination[4];
+            int j = bestCombination[3] + k * bestCombination[5];
 
             if (field[i][j] == ' ') {
                 field[i][j] = computerFigure;
@@ -130,7 +140,7 @@ public class TicTacToe {
         }
     }
 
-    public int[] checkCombination(int i, int j, int iShift, int jShift) {
+    public int[] checkCombination(int[] best, int i, int j, int iShift, int jShift) {
         int playerFigureCounter = 0;
         int computerFigureCounter = 0;
         int spaceCounter = 0;
@@ -148,9 +158,18 @@ public class TicTacToe {
         }
 
         if (spaceCounter == 0)
-            return null;
+            return best;
 
-        return new int[] {playerFigureCounter, computerFigureCounter, spaceCounter, i - iShift * fieldSize, j - jShift * fieldSize, iShift, jShift};
+        i = i - iShift * fieldSize;
+        j = j - jShift * fieldSize;
+
+        if (playerFigureCounter > best[0] || (playerFigureCounter == 0 && spaceCounter == 1)) {
+            return new int[] {playerFigureCounter, computerFigureCounter, i, j, iShift, jShift};
+        } /*else if (playerFigureCounter == best[0]) {
+
+        }*/
+//        return null;
+        return best;
     }
 
     public void playerMove(int yPos, int xPos) {
@@ -185,8 +204,14 @@ public class TicTacToe {
         }
     }
 
-    public void setFieldSize(int fieldSize) {
+    public void setFieldParams(int fieldSize) {
         this.fieldSize = fieldSize;
+
+        if (fieldSize > 4) {
+            this.lineLength = 4;
+        } else {
+            this.lineLength = 3;
+        }
     }
 
     public void setFigures(char playerFigure, char computerFigure) {
