@@ -22,22 +22,15 @@ public class TicTacToe {
         clearBoard();
         setFigures();
 
-        char winner;
         while (stepCounter < fieldSize * fieldSize) {
             if (computerFigure == 'o' || stepCounter != 0) {
                 computerMove();
                 System.out.println("Компьютер сделал ход:");
                 printField(field);
-                winner = checkWinner();
                 stepCounter++;
 
-                if (winner == computerFigure) {
-                    System.out.println("Вы проиграли!");
-                    break;
-                }
-                if (stepCounter == fieldSize * fieldSize) {
-                    System.out.println("Ничья");
-                    break;
+                if (checkWinner(stepCounter)) {
+                    return;
                 }
             } else {
                 printField(field);
@@ -60,16 +53,12 @@ public class TicTacToe {
                 System.out.println("Данная ячейка занята!");
             }
             playerMove(yPos, xPos);
-            winner = checkWinner();
+            System.out.println("Ваш ход:");
+            printField(field);
             stepCounter++;
 
-            if (winner == playerFigure) {
-                System.out.println("Вы победили!");
-                break;
-            }
-            if (stepCounter == fieldSize * fieldSize) {
-                System.out.println("Ничья");
-                break;
+            if (checkWinner(stepCounter)) {
+                return;
             }
         }
     }
@@ -85,7 +74,7 @@ public class TicTacToe {
                 if (i < fieldSize - lineLength + 1 && j < fieldSize - lineLength + 1) {
                     bestCombination = checkCombination(bestCombination, i, j, 1, 1);
 
-                    // Если осталось поставить только 1 фигуру, то ставим её
+                    // Если осталось поставить только 1 фигуру для победы, то ставим её
                     if (bestCombination[0] == 0 && (lineLength - bestCombination[0] - bestCombination[1] == 1)) {
                         setComputerFigureOnBoard(bestCombination);
                         return;
@@ -96,7 +85,7 @@ public class TicTacToe {
                 if (i > lineLength - 2 && j < fieldSize - lineLength + 1) {
                     bestCombination = checkCombination(bestCombination, i, j, -1, 1);
 
-                    // Если осталось поставить только 1 фигуру, то ставим её
+                    // Если осталось поставить только 1 фигуру для победы, то ставим её
                     if (bestCombination[0] == 0 && (lineLength - bestCombination[0] - bestCombination[1] == 1)) {
                         setComputerFigureOnBoard(bestCombination);
                         return;
@@ -107,7 +96,7 @@ public class TicTacToe {
                 if (j < fieldSize - lineLength + 1) {
                     bestCombination = checkCombination(bestCombination, i, j, 0, 1);
 
-                    // Если осталось поставить только 1 фигуру, то ставим её
+                    // Если осталось поставить только 1 фигуру для победы, то ставим её
                     if (bestCombination[0] == 0 && (lineLength - bestCombination[0] - bestCombination[1] == 1)) {
                         setComputerFigureOnBoard(bestCombination);
                         return;
@@ -118,7 +107,7 @@ public class TicTacToe {
                 if (i < fieldSize - lineLength + 1) {
                     bestCombination = checkCombination(bestCombination, i, j, 1, 0);
 
-                    // Если осталось поставить только 1 фигуру, то ставим её
+                    // Если осталось поставить только 1 фигуру для победы, то ставим её
                     if (bestCombination[0] == 0 && (lineLength - bestCombination[0] - bestCombination[1] == 1)) {
                         setComputerFigureOnBoard(bestCombination);
                         return;
@@ -144,14 +133,14 @@ public class TicTacToe {
         }
     }
 
-    // Метод вычисляет лучшую комбинацию для хода компьютера
-    public int[] checkCombination(int[] best, int i, int j, int iShift, int jShift) {
+    // Метод вычисляет лучшую комбинацию из полученной и текущей
+    public int[] checkCombination(int[] combination, int i, int j, int iShift, int jShift) {
         int playerFigureCounter = 0;
         int computerFigureCounter = 0;
         int spaceCounter = 0;
 
-        // Проходимся по линии и считаем сколько каких фигур в неё есть
-        for (int k = 0; k < fieldSize; k++) {
+        // Проходимся по линии и считаем сколько каких фигур в ней есть
+        for (int k = 0; k < lineLength; k++) {
             if (field[i][j] == computerFigure)
                 computerFigureCounter++;
             else if (field[i][j] == playerFigure)
@@ -164,17 +153,21 @@ public class TicTacToe {
         }
 
         // Если линия полностью заполнена, то дальше нет смысла проверять
-        if (spaceCounter == 0)
-            return best;
+        if (combination != null && spaceCounter == 0)
+            return combination;
 
-        i = i - iShift * fieldSize;
-        j = j - jShift * fieldSize;
+        i = i - iShift * lineLength;
+        j = j - jShift * lineLength;
 
-        if (playerFigureCounter > best[0] || (playerFigureCounter == 0 && spaceCounter == 1)) {
+        if (combination == null) {
             return new int[] {playerFigureCounter, computerFigureCounter, i, j, iShift, jShift};
         }
 
-        return best;
+        if (playerFigureCounter > combination[0] || (playerFigureCounter == 0 && spaceCounter == 1)) {
+            return new int[] {playerFigureCounter, computerFigureCounter, i, j, iShift, jShift};
+        }
+
+        return combination;
     }
 
     // Метод устанавливает фигуру игрока в указанную ячейку
@@ -183,20 +176,64 @@ public class TicTacToe {
     }
 
     // Метод проверяет есть ли линия с одинаковыми фигурами. Возвращает фигуру победителя или пробел
-    public char checkWinner() {
+    public boolean checkWinner(int stepCounter) {
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
-                if ((j < fieldSize - 2 && field[i][j] == field[i][j + 1] && field[i][j + 1] == field[i][j + 2])
-                || (i < fieldSize - 2 && field[i][j] == field[i + 1][j] && field[i + 1][j] == field[i + 2][j])
-                || (i < fieldSize - 2 && j < fieldSize - 2 && field[i][j] == field[i + 1][j + 1] && field[i + 1][j + 1] == field[i + 2][j + 2])
-                || (i > 1 && j < fieldSize - 2 && field[i][j] == field[i - 1][j + 1] && field[i - 1][j +1] == field[i - 2][j + 2])) {
-                    if (field[i][j] == computerFigure || field[i][j] == playerFigure)
-                        return field[i][j];
+                // Проверяем главную диагональ
+                if (i < fieldSize - lineLength + 1 && j < fieldSize - lineLength + 1) {
+                    int[] combination = checkCombination(null, i, j, 1, 1);
+
+                    if (combination[0] == lineLength || combination[1] == lineLength) {
+                        printWinner(combination);
+                        return true;
+                    }
+                }
+
+                // Проверяем побочную диагональ
+                if (i > lineLength - 2 && j < fieldSize - lineLength + 1) {
+                    int[] combination = checkCombination(null, i, j, -1, 1);
+
+                    if (combination[0] == lineLength || combination[1] == lineLength) {
+                        printWinner(combination);
+                        return true;
+                    }
+                }
+
+                // Проверяем горизонтальную линию
+                if (j < fieldSize - lineLength + 1) {
+                    int[] combination = checkCombination(null, i, j, 0, 1);
+
+                    if (combination[0] == lineLength || combination[1] == lineLength) {
+                        printWinner(combination);
+                        return true;
+                    }
+                }
+
+                // Проверяем вертикальную линию
+                if (i < fieldSize - lineLength + 1) {
+                    int[] combination = checkCombination(null, i, j, 1, 0);
+
+                    if (combination[0] == lineLength || combination[1] == lineLength) {
+                        printWinner(combination);
+                        return true;
+                    }
                 }
             }
         }
 
-        return ' ';
+        if (stepCounter == fieldSize * fieldSize) {
+            System.out.println("Ничья");
+            return true;
+        }
+        return false;
+    }
+
+    // Метод проверяет комбинацию на победителя
+    public void printWinner(int[] combination) {
+        if (combination[1] == lineLength)
+            System.out.println("Вы проиграли!");
+        else if (combination[0] == lineLength)
+            System.out.println("Вы победили!");
     }
 
     // Метод проверяет, является ли выбранная ячейка пустой
