@@ -12,12 +12,11 @@ public class Bowl {
         food = MAX_FOOD;
     }
 
-    public int getFood(int request) {
-        if (request > food) {
-            return 0;
-        } else {
-            food -= request;
-            return request;
-        }
+    public int getFood() {
+        return food;
+    }
+
+    public void spendFood(int food) {
+        this.food -= food;
     }
 }
