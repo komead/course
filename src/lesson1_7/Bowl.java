@@ -6,6 +6,7 @@ public class Bowl {
 
     public Bowl(int food) {
         this.MAX_FOOD = food;
+        this.food = food;
     }
 
     public void fillBowl() {
@@ -18,5 +19,6 @@ public class Bowl {
 
     public void spendFood(int food) {
         this.food -= food;
+        System.out.println("Было съедено " + food + " еды.\nВ миске осталось еды: " + this.food);
     }
 }

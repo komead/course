@@ -9,7 +9,7 @@ public class Cat {
     }
 
     public int eat(int foodInBowl) {
-        if (foodInBowl < MAX_satiety){
+        if (satiety || foodInBowl < MAX_satiety){
             return 0;
         }
         this.satiety = !this.satiety;
