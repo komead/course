@@ -3,7 +3,7 @@ package lesson1_8;
 import java.util.Arrays;
 
 public class Calculator {
-    public double run(int level, String string) {
+    public static double run(int level, String string, double x) {
         double result = 0;
         int counter = 1;
         char symbol = switch (level) {
@@ -32,18 +32,19 @@ public class Calculator {
         }
 
         for (int i = 0; i < buff.length; i++) {
+            buff[i] = replaceX(buff[i], x);
             switch (symbol) {
                 case '+':
-                    result += calculate(Double.toString(run(level + 1, buff[i])));
+                    result += calculate(Double.toString(run(level + 1, buff[i], x)));
                     break;
                 case '-':
                     if (i == 0)
-                        result = calculate(Double.toString(run(level + 1, buff[i])));
+                        result = calculate(Double.toString(run(level + 1, buff[i], x)));
                     else
-                        result -= calculate(Double.toString(run(level + 1, buff[i])));
+                        result -= calculate(Double.toString(run(level + 1, buff[i], x)));
                     break;
                 case '*':
-                    result *= calculate(Double.toString(run(level + 1, buff[i])));
+                    result *= calculate(Double.toString(run(level + 1, buff[i], x)));
                     break;
                 case '/':
                     if (i == 0)
@@ -57,7 +58,11 @@ public class Calculator {
         return result;
     }
 
-    private double calculate(String string) {
+    private static String replaceX(String string, double x) {
+        return string.replace("x", Double.toString(x));
+    }
+
+    private static double calculate(String string) {
         if (string.startsWith("sin"))
             return Math.sin(Math.toRadians(Double.valueOf(string.substring(4, string.length() - 1))));
 

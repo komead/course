@@ -2,6 +2,8 @@ package lesson1_8;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class StartWindow extends JFrame {
     JButton calculate;
@@ -16,24 +18,37 @@ public class StartWindow extends JFrame {
         calculate = new JButton("Calculate");
         expression = new JTextField();
 
-        setListener();
+        setListeners();
 
         expression.setMaximumSize(new Dimension(Integer.MAX_VALUE, expression.getPreferredSize().height));
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
         add(Box.createHorizontalStrut(10)); // Отступ между элементами
         add(expression);
-        add(Box.createHorizontalStrut(10)); // Отступ между элементами
+        add(Box.createHorizontalStrut(10));
         add(calculate);
-        add(Box.createHorizontalStrut(10)); // Отступ между элементами
+        add(Box.createHorizontalStrut(10));
 
 
         setVisible(true);
     }
 
-    private void setListener() {
+    private void setListeners() {
         calculate.addActionListener(e -> {
-            new Graph("");
+            Graph graph = new Graph(expression.getText());
+
+
+            graph.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    calculate.setEnabled(!calculate.isEnabled());
+                }
+
+                @Override
+                public void windowOpened(WindowEvent e) {
+                    calculate.setEnabled(!calculate.isEnabled());
+                }
+            });
         });
     }
 }
