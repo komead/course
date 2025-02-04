@@ -35,7 +35,7 @@ public class StartWindow extends JFrame {
 
     private void setListeners() {
         calculate.addActionListener(e -> {
-            Graph graph = new Graph(expression.getText());
+            GraphWindow graph = new GraphWindow(expression.getText());
 
 
             graph.addWindowListener(new WindowAdapter() {
