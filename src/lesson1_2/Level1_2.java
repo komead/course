@@ -117,26 +117,20 @@ public class Level1_2 {
         return "false";
     }
 
-    private static void task7(int[] arr, int shift) {
-        int k = shift < 0 ? -1 : 1;                 //коэффициент, который определяет в какую сторону сдвигается массив
-        int previousNumber = arr[arr.length - 1];   //число, которое поменяли в предыдущей итерации
-        int currentNumber;
-        int currentIndex = 0, previousIndex;        //индексы для чисел выше
+    public static void task7(int[] arr, int shift) {
+        // Если shift больше длины массива
+        shift = (arr.length + shift % arr.length) % arr.length;
 
-        //данный цикл сдвигает массив на 1 элемент |shift| раз
-        for (int i = 0; i < Math.abs(arr.length * shift); i++) {
-            //для первого элемента массива обновляется previousNumber
-            if (currentIndex == 0) {
-                previousIndex = (arr.length - k) % arr.length;
-                previousNumber = arr[previousIndex];
-            }
-            //сохраняется текущее число, на его место становится предыдущее, текущее становится предыдущим и меняется индекс
-            currentNumber = arr[currentIndex];
-            arr[currentIndex] = previousNumber;
+        reverse(arr, 0, arr.length - 1);
+        reverse(arr, 0, shift - 1);
+        reverse(arr, shift, arr.length - 1);
+    }
 
-            previousNumber = currentNumber;
-
-            currentIndex = (arr.length + currentIndex + k) % arr.length;
+    private static void reverse(int[] array, int start, int end) {
+        for (int buf; start < end; start++, end--) {
+            buf = array[start];
+            array[start] = array[end];
+            array[end] = buf;
         }
     }
 
@@ -145,7 +139,7 @@ public class Level1_2 {
         return firstNumber + secondNumber >= 10 && firstNumber + secondNumber <= 20;
     }
 
-    private static void task9(int number) {
+    public static void task9(int number) {
         if (number < 0) {
             System.out.println("Отрицательное");
         } else {
@@ -153,17 +147,17 @@ public class Level1_2 {
         }
     }
 
-    private static boolean task10(int number) {
+    public static boolean task10(int number) {
         return number < 0;
     }
 
-    private static void task11(String str, int n) {
+    public static void task11(String str, int n) {
         for (int i = 0; i < n; i++) {
             System.out.println(str);
         }
     }
 
-    private static boolean task12(int year) {
+    public static boolean task12(int year) {
         return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
     }
 
