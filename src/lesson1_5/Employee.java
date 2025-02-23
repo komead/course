@@ -4,8 +4,8 @@ public class Employee {
     private String fullName;
     private String position;
     private String email;
-    private String number;
-    private int patch;
+    private String number; //корректнее будет phone
+    private int patch; // корректнее будет sulary
     private int age;
 
     public Employee(String fullName, String position, String email, String number, int patch, int age) {
