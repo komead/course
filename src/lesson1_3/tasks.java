@@ -97,11 +97,13 @@ public class tasks {
                 "cherry", "garlic", "grape", "melon", "leak", "kiwi", "mango", "mushroom", "nut", "olive",
                 "pea", "peanut", "pear", "pepper", "pineapple", "pumpkin", "potato"};
         String word = words[random.nextInt(words.length)];
-
+        String answer = "";
+        
         while (true) {
             System.out.println("Угадайте загаданное слово: ");
-            String answer = scanner.next();
-
+ // String answer = scanner.next();
+            //на перезапись существующего значения уходит меньше ресурсов, чем на создание каждый раз нового.
+            answer = scanner.next();
             if (answer.equals(word)) {
                 System.out.println("Вы угадали слово!" + "\nИгра закончена");
                 break;
