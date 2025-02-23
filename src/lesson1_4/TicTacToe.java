@@ -281,7 +281,11 @@ public class TicTacToe {
     // Метод устанавливает фигурки для игроков
     public void setFigures() {
         Random random = new Random();
-
+        //альтернативный способ с помощью тернарного оператора
+        //boolean rand = random.nextBoolean();
+        //this.playerFigure = rand ? 'x' : 'o' ;
+        //this.computerFigure = rand ? 'o' : 'x';
+        
         if (random.nextBoolean()) {
             this.playerFigure = 'x';
             this.computerFigure = 'o';
