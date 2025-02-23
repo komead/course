@@ -9,11 +9,12 @@ public class Animal {
     }
 
     public void run(double length) {
-        if (length > maxRun) {
-            System.out.println("run: false");
-        } else {
-            System.out.println("run: true");
-        }
+        System.out.println("run: " + (length > maxRun)); //для остальных методов аналогично.
+        // if (length > maxRun) {
+        //     System.out.println("run: false");
+        // } else {
+        //     System.out.println("run: true");
+        // }
     }
 
     public void swim(double length) {
