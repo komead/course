@@ -8,6 +8,7 @@ public class Main {
                                                                 new Cat("Мурзик", 3, 200)});
 
         course.doIt(team);
-        team.showResults();
+        team.showResults(); // результаты всей команды
+        team.showWinners(); // вывод участников, которые прошли все испытания
     }
 }

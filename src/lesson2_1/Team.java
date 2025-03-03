@@ -31,4 +31,15 @@ public class Team {
             System.out.println();
         }
     }
+
+    public void showWinners() {
+        System.out.println("\nВсе препятствия прошли участники команды " + name + ":");
+
+        for (int i = 0; i < participants.length; i++) {
+            // Если пройдено последнее препятствие, то все предыдущие были тоже пройдены
+            if (results[i][results[i].length - 1]) {
+                System.out.println("Участник " + participants[i].getName());
+            }
+        }
+    }
 }
