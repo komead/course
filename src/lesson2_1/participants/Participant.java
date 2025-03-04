@@ -1,4 +1,4 @@
-package lesson2_1;
+package lesson2_1.participants;
 
 public interface Participant {
     void run(int distance);

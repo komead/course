@@ -1,5 +1,14 @@
 package lesson2_1;
 
+import lesson2_1.obsracles.Course;
+import lesson2_1.obsracles.Impl.Cross;
+import lesson2_1.obsracles.Obstacle;
+import lesson2_1.obsracles.Impl.Wall;
+import lesson2_1.participants.*;
+import lesson2_1.participants.Impl.Cat;
+import lesson2_1.participants.Impl.Human;
+import lesson2_1.participants.Impl.Robot;
+
 public class Main {
     public static void main(String[] args) {
         Course course = new Course(new Obstacle[] {new Wall(3), new Cross(200)});

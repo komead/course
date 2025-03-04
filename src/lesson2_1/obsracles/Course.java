@@ -1,4 +1,7 @@
-package lesson2_1;
+package lesson2_1.obsracles;
+
+import lesson2_1.participants.Participant;
+import lesson2_1.participants.Team;
 
 public class Course {
     private Obstacle[] obstacles;

@@ -1,4 +1,4 @@
-package lesson2_1;
+package lesson2_1.participants;
 
 public class Team {
     private String name;

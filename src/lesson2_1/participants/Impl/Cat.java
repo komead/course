@@ -1,6 +1,8 @@
-package lesson2_1;
+package lesson2_1.participants.Impl;
 
-public class Cat implements Participant{
+import lesson2_1.participants.Participant;
+
+public class Cat implements Participant {
     private String name;
     private final int MAX_JUMP;
     private final int MAX_RUN;

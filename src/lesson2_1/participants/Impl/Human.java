@@ -1,12 +1,14 @@
-package lesson2_1;
+package lesson2_1.participants.Impl;
 
-public class Robot implements Participant{
+import lesson2_1.participants.Participant;
+
+public class Human implements Participant {
     private String name;
     private final int MAX_JUMP;
     private final int MAX_RUN;
     private boolean fail;
 
-    public Robot(String name, int MAX_JUMP, int MAX_RUN) {
+    public Human(String name, int MAX_JUMP, int MAX_RUN) {
         this.name = name;
         this.MAX_JUMP = MAX_JUMP;
         this.MAX_RUN = MAX_RUN;

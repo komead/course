@@ -1,4 +1,7 @@
-package lesson2_1;
+package lesson2_1.obsracles.Impl;
+
+import lesson2_1.obsracles.Obstacle;
+import lesson2_1.participants.Participant;
 
 public class Wall implements Obstacle {
     private final String TYPE = "wall";
