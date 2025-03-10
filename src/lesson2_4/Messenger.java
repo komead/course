@@ -14,25 +14,33 @@ public class Messenger extends JFrame {
         setBounds(100, 100, 400, 500);
         setResizable(false);
 
-        Box verticalBox = Box.createVerticalBox();
         sendMessage_b = new JButton("Send");
         message_tf = new JTextField();
         output_ta = new JTextArea();
 
+        message_tf.setMaximumSize(new Dimension(Integer.MAX_VALUE, message_tf.getPreferredSize().height));
+        output_ta.setEditable(false);
+
+        Box verticalBox = Box.createVerticalBox();
+        addVerticalBorder(verticalBox, 20);
         verticalBox.add(output_ta);
+        addVerticalBorder(verticalBox, 20);
 
         Box horizontalBox = Box.createHorizontalBox();
+        addHorizontalBorder(horizontalBox, 10);
         horizontalBox.add(message_tf);
+        addHorizontalBorder(horizontalBox, 10);
         horizontalBox.add(sendMessage_b);
+        addHorizontalBorder(horizontalBox, 10);
 
         setListeners();
 
-        message_tf.setMaximumSize(new Dimension(Integer.MAX_VALUE, message_tf.getPreferredSize().height));
-
         verticalBox.add(horizontalBox);
+        addVerticalBorder(verticalBox, 20);
         add(verticalBox);
 
         setVisible(true);
+        SwingUtilities.invokeLater(() -> message_tf.requestFocusInWindow()); // установка курсора в поле для записи
     }
 
     private void setListeners() {
@@ -50,5 +58,14 @@ public class Messenger extends JFrame {
             output_ta.append(message_tf.getText() + "\n");
             message_tf.setText("");
         }
+        SwingUtilities.invokeLater(() -> message_tf.requestFocusInWindow()); // установка курсора в поле для записи
+    }
+
+    private void addHorizontalBorder(Box box, int border) {
+        box.add(Box.createHorizontalStrut(border));
+    }
+
+    private void addVerticalBorder(Box box, int border) {
+        box.add(Box.createVerticalStrut(border));
     }
 }
