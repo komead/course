@@ -13,35 +13,37 @@ public class ClientHandler {
     public ClientHandler(Socket socket) {
         try {
             this.socket = socket;
-            this.inputStream = new DataInputStream(this.socket.getInputStream());
-            this.outputStream = new DataOutputStream(this.socket.getOutputStream());
-            new Thread(() -> {
-                    try {
-                        while (true) {
-                            String msg = inputStream.readUTF();
-                            System.out.println("client: " + msg);
-                            sendMessage("echo: " + msg);
-                            if (msg.equals("/end")) break;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            socket.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-            }).start();
+            inputStream = new DataInputStream(this.socket.getInputStream());
+            outputStream = new DataOutputStream(this.socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String checkMessage() {
+        String receivedMessage = "";
+        try {
+            receivedMessage = inputStream.readUTF();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return receivedMessage;
     }
 
-    public void sendMessage(String msg){
+    public void finish() {
         try {
-            outputStream.writeUTF(msg);
+            inputStream.close();
+            outputStream.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMessage(String message) {
+        try {
+            outputStream.writeUTF(message);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,17 +2,23 @@ package lesson2_6.client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Messenger extends JFrame {
     private JButton sendMessage_b;
     private JTextField message_tf;
     private JTextArea output_ta;
 
+    private ServerHandler serverHandler;
+
     public Messenger() {
         setView();
+
+        serverHandler = new ServerHandler();
+        serverHandler.connect();
+
         setListeners();
-
-
     }
 
     private void setView() {
@@ -56,11 +62,36 @@ public class Messenger extends JFrame {
         message_tf.addActionListener(e -> {
             messageSender();
         });
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                serverHandler.sendMessage("/end");
+                serverHandler.finish();
+            }
+        });
+
+        // тут будем прослушивать сообщения от сервера
+        Thread t = new Thread(() -> {
+            String receivedMessage = "";
+                while (true) {
+                    receivedMessage = serverHandler.checkMessage();
+
+                    if (receivedMessage == null) {
+                        break;
+                    }
+
+                    if (!receivedMessage.isEmpty()) {
+                        output_ta.append(receivedMessage);
+                    }
+                }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     private void messageSender() {
         if (!message_tf.getText().isEmpty()) {
-            // написать реализацию отправки сообщения
+            serverHandler.sendMessage(message_tf.getText() + "\n");
 
             output_ta.append(message_tf.getText() + "\n");
             message_tf.setText("");

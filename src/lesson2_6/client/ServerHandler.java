@@ -23,31 +23,32 @@ public class ServerHandler {
         }
     }
 
-    public void startListening() {
-        // !!!!!!!!это нужно переделывать
-        Thread t = new Thread(() -> {
-            String receivedMessage;
-            try {
-                while (true) {
-                    receivedMessage = inputStream.readUTF();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        t.setDaemon(true);
-        t.start();
+    public String checkMessage() {
+        if (socket.isClosed()) {
+            return null;
+        }
+
+        String receivedMessage = "";
+        try {
+            receivedMessage = inputStream.readUTF();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return receivedMessage;
     }
 
     public void finish() {
         try {
+            inputStream.close();
+            outputStream.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void sendMsg(String message) {
+    public void sendMessage(String message) {
         try {
             outputStream.writeUTF(message);
         } catch (IOException e) {
