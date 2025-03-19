@@ -24,10 +24,6 @@ public class ServerHandler {
     }
 
     public String checkMessage() {
-        if (socket.isClosed()) {
-            return null;
-        }
-
         String receivedMessage = "";
         try {
             receivedMessage = inputStream.readUTF();
@@ -54,5 +50,9 @@ public class ServerHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isConnected() {
+        return socket.isConnected();
     }
 }

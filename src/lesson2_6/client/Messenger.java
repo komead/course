@@ -63,6 +63,7 @@ public class Messenger extends JFrame {
             messageSender();
         });
 
+        // Если окно закрывается, то передаём серверу информацию о завершении общения
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 serverHandler.sendMessage("/end");
@@ -73,15 +74,17 @@ public class Messenger extends JFrame {
         // тут будем прослушивать сообщения от сервера
         Thread t = new Thread(() -> {
             String receivedMessage = "";
-                while (true) {
+                while (serverHandler.isConnected()) {
                     receivedMessage = serverHandler.checkMessage();
 
-                    if (receivedMessage == null) {
-                        break;
+                    if (!receivedMessage.isEmpty()) {
+                        output_ta.append(receivedMessage + "\n");
                     }
 
-                    if (!receivedMessage.isEmpty()) {
-                        output_ta.append(receivedMessage);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
                 }
         });
@@ -89,9 +92,10 @@ public class Messenger extends JFrame {
         t.start();
     }
 
+    // Метод для извлечения сообщения и его отправки
     private void messageSender() {
         if (!message_tf.getText().isEmpty()) {
-            serverHandler.sendMessage(message_tf.getText() + "\n");
+            serverHandler.sendMessage(message_tf.getText());
 
             output_ta.append(message_tf.getText() + "\n");
             message_tf.setText("");
